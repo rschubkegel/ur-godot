@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Board.gd" type="Script" id=1]
 [ext_resource path="res://styles/Tile_Syle.tres" type="Theme" id=2]
 [ext_resource path="res://styles/UI_Style.tres" type="Theme" id=3]
+[ext_resource path="res://images/dice.png" type="Texture" id=4]
+[ext_resource path="res://images/hexagon_out.png" type="Texture" id=5]
+[ext_resource path="res://images/hexagon_in.png" type="Texture" id=6]
+[ext_resource path="res://images/dice_0.png" type="Texture" id=7]
+[ext_resource path="res://images/chess_pawn.png" type="Texture" id=8]
 
 [node name="board" type="Control"]
 anchor_right = 1.0
@@ -22,357 +27,518 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="cols1" type="HBoxContainer" parent="rows"]
-margin_top = 4.0
-margin_right = 300.0
-margin_bottom = 68.0
-theme = ExtResource( 2 )
+[node name="info" type="HBoxContainer" parent="rows"]
+margin_top = 21.0
+margin_right = 400.0
+margin_bottom = 85.0
 alignment = 1
 
-[node name="btn1" type="Button" parent="rows/cols1" groups=[
-"player_one_tiles",
-"reroll_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
+[node name="die1" type="TextureRect" parent="rows/info"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 66.0
+margin_right = 130.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "R"
+texture = ExtResource( 7 )
 
-[node name="btn2" type="Button" parent="rows/cols1" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
+[node name="die2" type="TextureRect" parent="rows/info"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 134.0
+margin_right = 198.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
+texture = ExtResource( 7 )
 
-[node name="btn3" type="Button" parent="rows/cols1" groups=[
-"player_two_tiles",
-"reroll_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
+[node name="die3" type="TextureRect" parent="rows/info"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 202.0
+margin_right = 266.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "R"
+texture = ExtResource( 7 )
 
-[node name="cols2" type="HBoxContainer" parent="rows"]
-margin_top = 72.0
-margin_right = 300.0
-margin_bottom = 136.0
-theme = ExtResource( 2 )
-alignment = 1
-
-[node name="btn1" type="Button" parent="rows/cols2" groups=[
-"player_one_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
+[node name="die4" type="TextureRect" parent="rows/info"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 270.0
+margin_right = 334.0
 margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
+texture = ExtResource( 7 )
 
-[node name="btn2" type="Button" parent="rows/cols2" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="btn3" type="Button" parent="rows/cols2" groups=[
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="cols3" type="HBoxContainer" parent="rows"]
-margin_top = 140.0
-margin_right = 300.0
-margin_bottom = 204.0
-theme = ExtResource( 2 )
-alignment = 1
-
-[node name="btn1" type="Button" parent="rows/cols3" groups=[
-"player_one_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="btn2" type="Button" parent="rows/cols3" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="btn3" type="Button" parent="rows/cols3" groups=[
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="cols4" type="HBoxContainer" parent="rows"]
-margin_top = 208.0
-margin_right = 300.0
-margin_bottom = 272.0
-theme = ExtResource( 2 )
-alignment = 1
-
-[node name="btn1" type="Button" parent="rows/cols4" groups=[
-"player_one_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="btn2" type="Button" parent="rows/cols4" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"reroll_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "R"
-
-[node name="btn3" type="Button" parent="rows/cols4" groups=[
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="cols5" type="HBoxContainer" parent="rows"]
-margin_top = 276.0
-margin_right = 300.0
-margin_bottom = 340.0
-theme = ExtResource( 2 )
-alignment = 1
-
-[node name="btn1" type="Button" parent="rows/cols5" groups=[
-"player_one_tiles",
-"start_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "s"
-
-[node name="btn2" type="Button" parent="rows/cols5" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="btn3" type="Button" parent="rows/cols5" groups=[
-"player_two_tiles",
-"start_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "s"
-
-[node name="cols6" type="HBoxContainer" parent="rows"]
-margin_top = 344.0
-margin_right = 300.0
-margin_bottom = 408.0
-theme = ExtResource( 2 )
-alignment = 1
-
-[node name="btn1" type="Button" parent="rows/cols6" groups=[
-"end_tiles",
-"player_one_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "e"
+[node name="tiles" type="VBoxContainer" parent="rows"]
+margin_top = 89.0
+margin_right = 400.0
+margin_bottom = 693.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="btn2" type="Button" parent="rows/cols6" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = " "
-
-[node name="btn3" type="Button" parent="rows/cols6" groups=[
-"end_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-theme = ExtResource( 2 )
-text = "e"
-
-[node name="cols7" type="HBoxContainer" parent="rows"]
-margin_top = 412.0
-margin_right = 300.0
-margin_bottom = 476.0
+[node name="cols1" type="HBoxContainer" parent="rows/tiles"]
+margin_right = 400.0
+margin_bottom = 72.0
 theme = ExtResource( 2 )
 alignment = 1
 
-[node name="btn1" type="Button" parent="rows/cols7" groups=[
-"player_one_tiles",
-"reroll_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+[node name="btn1" type="Button" parent="rows/tiles/cols1" groups=["player_one_tiles", "reroll_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
-text = "R"
 
-[node name="btn2" type="Button" parent="rows/cols7" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols1/btn1"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn2" type="Button" parent="rows/tiles/cols1" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
-[node name="btn3" type="Button" parent="rows/cols7" groups=[
-"player_two_tiles",
-"reroll_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+[node name="btn3" type="Button" parent="rows/tiles/cols1" groups=["player_two_tiles", "reroll_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
-text = "R"
 
-[node name="cols8" type="HBoxContainer" parent="rows"]
-margin_top = 480.0
-margin_right = 300.0
-margin_bottom = 544.0
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols1/btn3"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cols2" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 76.0
+margin_right = 400.0
+margin_bottom = 148.0
 theme = ExtResource( 2 )
 alignment = 1
 
-[node name="btn1" type="Button" parent="rows/cols8" groups=[
-"player_one_tiles",
-"tiles",
-]]
-margin_left = 50.0
-margin_right = 114.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+[node name="btn1" type="Button" parent="rows/tiles/cols2" groups=["player_one_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
-[node name="btn2" type="Button" parent="rows/cols8" groups=[
-"player_one_tiles",
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 118.0
-margin_right = 182.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+[node name="btn2" type="Button" parent="rows/tiles/cols2" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
-[node name="btn3" type="Button" parent="rows/cols8" groups=[
-"player_two_tiles",
-"tiles",
-]]
-margin_left = 186.0
-margin_right = 250.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+[node name="btn3" type="Button" parent="rows/tiles/cols2" groups=["player_two_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="cols3" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 152.0
+margin_right = 400.0
+margin_bottom = 224.0
+theme = ExtResource( 2 )
+alignment = 1
+
+[node name="btn1" type="Button" parent="rows/tiles/cols3" groups=["player_one_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn2" type="Button" parent="rows/tiles/cols3" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn3" type="Button" parent="rows/tiles/cols3" groups=["player_two_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="cols4" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 228.0
+margin_right = 400.0
+margin_bottom = 300.0
+theme = ExtResource( 2 )
+alignment = 1
+
+[node name="btn1" type="Button" parent="rows/tiles/cols4" groups=["player_one_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn2" type="Button" parent="rows/tiles/cols4" groups=["player_one_tiles", "player_two_tiles", "reroll_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols4/btn2"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn3" type="Button" parent="rows/tiles/cols4" groups=["player_two_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="cols5" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 304.0
+margin_right = 400.0
+margin_bottom = 376.0
+theme = ExtResource( 2 )
+alignment = 1
+
+[node name="p1counter" type="TextureRect" parent="rows/tiles/cols5"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 20.0
+margin_right = 84.0
+margin_bottom = 72.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="text" type="Label" parent="rows/tiles/cols5/p1counter"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+text = "7"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn1" type="Button" parent="rows/tiles/cols5" groups=["player_one_tiles", "start_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols5/btn1"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn2" type="Button" parent="rows/tiles/cols5" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn3" type="Button" parent="rows/tiles/cols5" groups=["player_two_tiles", "start_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols5/btn3"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="p2counter" type="TextureRect" parent="rows/tiles/cols5"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 316.0
+margin_right = 380.0
+margin_bottom = 72.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="text" type="Label" parent="rows/tiles/cols5/p2counter"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+text = "7"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cols6" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 380.0
+margin_right = 400.0
+margin_bottom = 452.0
+theme = ExtResource( 2 )
+alignment = 1
+
+[node name="p1counter" type="TextureRect" parent="rows/tiles/cols6"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 20.0
+margin_right = 84.0
+margin_bottom = 72.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="text" type="Label" parent="rows/tiles/cols6/p1counter"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+text = "7"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn1" type="Button" parent="rows/tiles/cols6" groups=["end_tiles", "player_one_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols6/btn1"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn2" type="Button" parent="rows/tiles/cols6" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn3" type="Button" parent="rows/tiles/cols6" groups=["end_tiles", "player_two_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols6/btn3"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="p2counter" type="TextureRect" parent="rows/tiles/cols6"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+margin_left = 316.0
+margin_right = 380.0
+margin_bottom = 72.0
+texture = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="text" type="Label" parent="rows/tiles/cols6/p2counter"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 3 )
+text = "7"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cols7" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 456.0
+margin_right = 400.0
+margin_bottom = 528.0
+theme = ExtResource( 2 )
+alignment = 1
+
+[node name="btn1" type="Button" parent="rows/tiles/cols7" groups=["player_one_tiles", "reroll_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols7/btn1"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="btn2" type="Button" parent="rows/tiles/cols7" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn3" type="Button" parent="rows/tiles/cols7" groups=["player_two_tiles", "reroll_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="rows/tiles/cols7/btn3"]
+modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cols8" type="HBoxContainer" parent="rows/tiles"]
+margin_top = 532.0
+margin_right = 400.0
+margin_bottom = 604.0
+theme = ExtResource( 2 )
+alignment = 1
+
+[node name="btn1" type="Button" parent="rows/tiles/cols8" groups=["player_one_tiles", "tiles"]]
+margin_left = 88.0
+margin_right = 160.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn2" type="Button" parent="rows/tiles/cols8" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
+margin_left = 164.0
+margin_right = 236.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
+theme = ExtResource( 2 )
+text = " "
+
+[node name="btn3" type="Button" parent="rows/tiles/cols8" groups=["player_two_tiles", "tiles"]]
+margin_left = 240.0
+margin_right = 312.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="actions" type="HBoxContainer" parent="rows"]
-margin_top = 548.0
-margin_right = 300.0
-margin_bottom = 596.0
+margin_top = 697.0
+margin_right = 400.0
+margin_bottom = 728.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="menu_button" type="Button" parent="rows/actions"]
-margin_left = 50.0
-margin_right = 250.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 200, 48 )
+margin_right = 400.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
 theme = ExtResource( 3 )
 text = "Main Menu"
+
+[node name="ZeroRollTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="ZeroRollTimer" to="." method="switch_player"]
