@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/Board.gd" type="Script" id=1]
 [ext_resource path="res://styles/Tile_Syle.tres" type="Theme" id=2]
@@ -8,6 +8,10 @@
 [ext_resource path="res://images/hexagon_in.png" type="Texture" id=6]
 [ext_resource path="res://images/dice_0.png" type="Texture" id=7]
 [ext_resource path="res://images/chess_pawn.png" type="Texture" id=8]
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="board" type="Control"]
 anchor_right = 1.0
@@ -28,38 +32,66 @@ __meta__ = {
 }
 
 [node name="info" type="HBoxContainer" parent="rows"]
-margin_top = 21.0
+margin_top = 1.0
 margin_right = 400.0
-margin_bottom = 85.0
+margin_bottom = 65.0
 alignment = 1
 
 [node name="die1" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 66.0
-margin_right = 130.0
+margin_left = 24.0
+margin_right = 88.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
+
+[node name="VSeparator" type="VSeparator" parent="rows/info"]
+margin_left = 92.0
+margin_right = 116.0
+margin_bottom = 64.0
+custom_constants/separation = 24
+custom_styles/separator = SubResource( 2 )
 
 [node name="die2" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 134.0
-margin_right = 198.0
+margin_left = 120.0
+margin_right = 184.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
+
+[node name="VSeparator2" type="VSeparator" parent="rows/info"]
+margin_left = 188.0
+margin_right = 212.0
+margin_bottom = 64.0
+custom_constants/separation = 24
+custom_styles/separator = SubResource( 2 )
 
 [node name="die3" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 202.0
-margin_right = 266.0
+margin_left = 216.0
+margin_right = 280.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
 
+[node name="VSeparator3" type="VSeparator" parent="rows/info"]
+margin_left = 284.0
+margin_right = 308.0
+margin_bottom = 64.0
+custom_constants/separation = 24
+custom_styles/separator = SubResource( 2 )
+
 [node name="die4" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 270.0
-margin_right = 334.0
+margin_left = 312.0
+margin_right = 376.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
+
+[node name="HSeparator" type="HSeparator" parent="rows"]
+margin_top = 69.0
+margin_right = 400.0
+margin_bottom = 85.0
+custom_constants/separation = 16
+custom_styles/separator = SubResource( 1 )
 
 [node name="tiles" type="VBoxContainer" parent="rows"]
 margin_top = 89.0
@@ -523,17 +555,25 @@ rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
-[node name="actions" type="HBoxContainer" parent="rows"]
+[node name="HSeparator2" type="HSeparator" parent="rows"]
 margin_top = 697.0
 margin_right = 400.0
-margin_bottom = 728.0
+margin_bottom = 713.0
+custom_constants/separation = 16
+custom_styles/separator = SubResource( 1 )
+
+[node name="actions" type="HBoxContainer" parent="rows"]
+margin_top = 717.0
+margin_right = 400.0
+margin_bottom = 748.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="menu_button" type="Button" parent="rows/actions"]
-margin_right = 400.0
+margin_left = 88.0
+margin_right = 312.0
 margin_bottom = 31.0
-size_flags_horizontal = 3
+rect_min_size = Vector2( 224, 0 )
 theme = ExtResource( 3 )
 text = "Main Menu"
 

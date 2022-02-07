@@ -19,6 +19,7 @@ var player_one_score = 0
 var player_two_score = 0
 var selected_token = null
 var reroll_tiles = null
+var die_nodes = []
 
 
 # connects all buttons to player tile list
@@ -58,11 +59,19 @@ func load_tiles():
 	player_two_tiles.append($rows/tiles/cols6/btn3)
 
 
+# assign scene nodes to array
+func assign_dice():
+	for node in $rows/info.get_children():
+		if node.name.begins_with("die"):
+			die_nodes.append(node)
+
+
 # called when the board is loaded
 func _ready():
 	
 	# init variables
 	load_tiles()
+	assign_dice()
 	
 	player_one_start_tile = player_one_tiles[0]
 	player_two_start_tile = player_two_tiles[0]
@@ -141,8 +150,8 @@ func roll_dice():
 	for i in range(4):
 		var roll = randi() % 2
 		sum += roll
-		$rows/info.get_child(i).texture = die_imgs[roll]
-		$rows/info.get_child(i).modulate = player_colors[cur_player - 1]
+		die_nodes[i].texture = die_imgs[roll]
+		die_nodes[i].modulate = player_colors[cur_player - 1]
 	print("Player ", str(cur_player), " rolled ", sum)
 	cur_roll = sum
 	
