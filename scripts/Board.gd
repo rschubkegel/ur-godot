@@ -9,8 +9,7 @@ const player_token_count = 7
 var cur_roll = 0
 var cur_player = 1
 var player_tokens = [[], []]
-var player_one_tiles = []
-var player_two_tiles = []
+var player_tiles = [[], []]
 var player_one_start_tile = null
 var player_two_start_tile = null
 var player_one_end_tile = null
@@ -24,39 +23,39 @@ var die_nodes = []
 
 # connects all buttons to player tile list
 func load_tiles():
-	player_one_tiles.append($rows/tiles/cols5/btn1)
-	player_one_tiles.append($rows/tiles/cols4/btn1)
-	player_one_tiles.append($rows/tiles/cols3/btn1)
-	player_one_tiles.append($rows/tiles/cols2/btn1)
-	player_one_tiles.append($rows/tiles/cols1/btn1)
-	player_one_tiles.append($rows/tiles/cols1/btn2)
-	player_one_tiles.append($rows/tiles/cols2/btn2)
-	player_one_tiles.append($rows/tiles/cols3/btn2)
-	player_one_tiles.append($rows/tiles/cols4/btn2)
-	player_one_tiles.append($rows/tiles/cols5/btn2)
-	player_one_tiles.append($rows/tiles/cols6/btn2)
-	player_one_tiles.append($rows/tiles/cols7/btn2)
-	player_one_tiles.append($rows/tiles/cols8/btn2)
-	player_one_tiles.append($rows/tiles/cols8/btn1)
-	player_one_tiles.append($rows/tiles/cols7/btn1)
-	player_one_tiles.append($rows/tiles/cols6/btn1)
+	player_tiles[0].append($rows/tiles/cols5/btn1)
+	player_tiles[0].append($rows/tiles/cols4/btn1)
+	player_tiles[0].append($rows/tiles/cols3/btn1)
+	player_tiles[0].append($rows/tiles/cols2/btn1)
+	player_tiles[0].append($rows/tiles/cols1/btn1)
+	player_tiles[0].append($rows/tiles/cols1/btn2)
+	player_tiles[0].append($rows/tiles/cols2/btn2)
+	player_tiles[0].append($rows/tiles/cols3/btn2)
+	player_tiles[0].append($rows/tiles/cols4/btn2)
+	player_tiles[0].append($rows/tiles/cols5/btn2)
+	player_tiles[0].append($rows/tiles/cols6/btn2)
+	player_tiles[0].append($rows/tiles/cols7/btn2)
+	player_tiles[0].append($rows/tiles/cols8/btn2)
+	player_tiles[0].append($rows/tiles/cols8/btn1)
+	player_tiles[0].append($rows/tiles/cols7/btn1)
+	player_tiles[0].append($rows/tiles/cols6/btn1)
 	
-	player_two_tiles.append($rows/tiles/cols5/btn3)
-	player_two_tiles.append($rows/tiles/cols4/btn3)
-	player_two_tiles.append($rows/tiles/cols3/btn3)
-	player_two_tiles.append($rows/tiles/cols2/btn3)
-	player_two_tiles.append($rows/tiles/cols1/btn3)
-	player_two_tiles.append($rows/tiles/cols1/btn2)
-	player_two_tiles.append($rows/tiles/cols2/btn2)
-	player_two_tiles.append($rows/tiles/cols3/btn2)
-	player_two_tiles.append($rows/tiles/cols4/btn2)
-	player_two_tiles.append($rows/tiles/cols5/btn2)
-	player_two_tiles.append($rows/tiles/cols6/btn2)
-	player_two_tiles.append($rows/tiles/cols7/btn2)
-	player_two_tiles.append($rows/tiles/cols8/btn2)
-	player_two_tiles.append($rows/tiles/cols8/btn3)
-	player_two_tiles.append($rows/tiles/cols7/btn3)
-	player_two_tiles.append($rows/tiles/cols6/btn3)
+	player_tiles[1].append($rows/tiles/cols5/btn3)
+	player_tiles[1].append($rows/tiles/cols4/btn3)
+	player_tiles[1].append($rows/tiles/cols3/btn3)
+	player_tiles[1].append($rows/tiles/cols2/btn3)
+	player_tiles[1].append($rows/tiles/cols1/btn3)
+	player_tiles[1].append($rows/tiles/cols1/btn2)
+	player_tiles[1].append($rows/tiles/cols2/btn2)
+	player_tiles[1].append($rows/tiles/cols3/btn2)
+	player_tiles[1].append($rows/tiles/cols4/btn2)
+	player_tiles[1].append($rows/tiles/cols5/btn2)
+	player_tiles[1].append($rows/tiles/cols6/btn2)
+	player_tiles[1].append($rows/tiles/cols7/btn2)
+	player_tiles[1].append($rows/tiles/cols8/btn2)
+	player_tiles[1].append($rows/tiles/cols8/btn3)
+	player_tiles[1].append($rows/tiles/cols7/btn3)
+	player_tiles[1].append($rows/tiles/cols6/btn3)
 
 
 # assign scene nodes to array
@@ -73,11 +72,11 @@ func _ready():
 	load_tiles()
 	assign_dice()
 	
-	player_one_start_tile = player_one_tiles[0]
-	player_two_start_tile = player_two_tiles[0]
+	player_one_start_tile = player_tiles[0][0]
+	player_two_start_tile = player_tiles[1][0]
 	
-	player_one_end_tile = player_one_tiles[-1]
-	player_two_end_tile = player_two_tiles[-1]
+	player_one_end_tile = player_tiles[0][-1]
+	player_two_end_tile = player_tiles[1][-1]
 	
 	reroll_tiles = get_tree().get_nodes_in_group("reroll_tiles")
 	
@@ -110,10 +109,7 @@ func tile_clicked(tile):
 		return
 	
 	# did the player play on their own path?
-	if (cur_player == 1 \
-		and tile in player_one_tiles) \
-		or (cur_player == 2 \
-		and tile in player_two_tiles):
+	if tile in player_tiles[cur_player - 1]:
 		
 		# token is currently selected; player is trying to place tile
 		if selected_token:
@@ -172,9 +168,7 @@ func switch_player():
 
 # return distance between two tiles
 func get_tile_distance(from, to):
-	var tile_list = player_one_tiles
-	if cur_player == 2:
-		tile_list = player_two_tiles
+	var tile_list = player_tiles[cur_player - 1]
 	
 	var i1 = tile_list.find(from)
 	var i2 = tile_list.find(to)
