@@ -4,11 +4,11 @@ const Token = preload("res://scripts/Token.gd")
 const pawn_img = preload("res://images/chess_pawn.png")
 const die_imgs = [preload("res://images/dice_0.png"), preload("res://images/dice_1.png")]
 const player_colors = [Color(0.10, 0.25, 0.45), Color(0.45, 0.16, 0.15)]
+const player_token_count = 7
 
 var cur_roll = 0
 var cur_player = 1
-var player_one_tokens = []
-var player_two_tokens = []
+var player_tokens = [[], []]
 var player_one_tiles = []
 var player_two_tiles = []
 var player_one_start_tile = null
@@ -86,9 +86,9 @@ func _ready():
 		btn.connect("pressed", self, "tile_clicked", [btn])
 	
 	# create player tokens
-	for _i in range(7):
-		player_one_tokens.append(Token.new(player_one_start_tile))
-		player_two_tokens.append(Token.new(player_two_start_tile))
+	for _i in range(player_token_count):
+		player_tokens[0].append(Token.new(player_one_start_tile))
+		player_tokens[1].append(Token.new(player_two_start_tile))
 	
 	# init player token counters
 	$rows/tiles/cols5/p1counter.modulate = player_colors[0]
@@ -129,8 +129,7 @@ func tile_clicked(tile):
 			# get token on selected tile (if possible)
 			selected_token = get_player_token_on_tile(tile)
 			if selected_token:
-				if (cur_player == 2 and selected_token in player_one_tokens) \
-				or (cur_player == 1 and selected_token in player_two_tokens):
+				if not selected_token in player_tokens[cur_player - 1]:
 					print("Not your token!")
 					selected_token = null
 					return
@@ -185,13 +184,12 @@ func get_tile_distance(from, to):
 
 # returns the player token on the specified tile (if one exists)
 func get_player_token_on_tile(tile):
-	for token in player_one_tokens:
-		if token.get_tile() == tile:
-			return token
-	for token in player_two_tokens:
-		if token.get_tile() == tile:
-			return token
-	return null
+	var token = null
+	for token_list in player_tokens:
+		for t in token_list:
+			if t.get_tile() == tile:
+				token = t
+	return token
 
 
 # resets the text of the specified button to how it was
@@ -236,8 +234,8 @@ func end_turn(tile_played):
 			player_two_score += 1
 		
 		# end of game
-		if player_one_score == len(player_one_tokens) \
-		or player_two_score == len(player_one_tokens):
+		if player_one_score == player_token_count \
+		or player_two_score == player_token_count:
 			win(cur_player)
 			return
 		
@@ -263,10 +261,9 @@ func place_selected_token(tile):
 	# the currently selected token?
 	var other_token = get_player_token_on_tile(tile)
 	
-	var opponent_tokens = player_one_tokens
+	var opponent_tokens = player_tokens[1 - (cur_player - 1)]
 	var opponent_start = player_one_start_tile
 	if cur_player == 1:
-		opponent_tokens = player_two_tokens
 		opponent_start = player_two_start_tile
 	
 	# make sure move matches roll
@@ -343,26 +340,21 @@ func add_pawn_child(node):
 
 # updates the players' pawn counters
 func update_counters():
-	var start_count = 0
-	for t in player_one_tokens:
-		if t.get_tile() == player_one_start_tile:
-			start_count += 1
-	$rows/tiles/cols5/p1counter/text.text = str(start_count)
-	
-	start_count = 0
-	for t in player_two_tokens:
-		if t.get_tile() == player_two_start_tile:
-			start_count += 1
-	$rows/tiles/cols5/p2counter/text.text = str(start_count)
-	
-	var end_count = 0
-	for t in player_one_tokens:
-		if t.get_tile() == player_one_end_tile:
-			end_count += 1
-	$rows/tiles/cols6/p1counter/text.text = str(end_count)
-	
-	end_count = 0
-	for t in player_two_tokens:
-		if t.get_tile() == player_two_end_tile:
-			end_count += 1
-	$rows/tiles/cols6/p2counter/text.text = str(end_count)
+	var start_count1 = 0
+	var start_count2 = 0
+	var end_count1 = 0
+	var end_count2 = 0
+	for token_list in player_tokens:
+		for t in token_list:
+			if t.get_tile() == player_one_start_tile:
+				start_count1 += 1
+			elif t.get_tile() == player_two_start_tile:
+				start_count2 += 1
+			elif t.get_tile() == player_one_end_tile:
+				end_count1 += 1
+			elif t.get_tile() == player_two_end_tile:
+				end_count2 += 1
+	$rows/tiles/cols5/p1counter/text.text = str(start_count1)
+	$rows/tiles/cols5/p2counter/text.text = str(start_count2)
+	$rows/tiles/cols6/p1counter/text.text = str(end_count1)
+	$rows/tiles/cols6/p2counter/text.text = str(end_count2)
