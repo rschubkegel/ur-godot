@@ -120,6 +120,11 @@ func tile_clicked(tile):
 			# get token on selected tile (if possible)
 			selected_token = get_player_token_on_tile(tile)
 			if selected_token:
+				if (cur_player == 2 and selected_token in player_one_tokens) \
+				or (cur_player == 1 and selected_token in player_two_tokens):
+					print("Not your token!")
+					selected_token = null
+					return
 				print("Token selected")
 				tile.modulate = Color.yellow
 			else:
