@@ -10,10 +10,6 @@ var cur_roll = 0
 var cur_player = 1
 var player_tokens = [[], []]
 var player_tiles = [[], []]
-var player_one_start_tile = null
-var player_two_start_tile = null
-var player_one_end_tile = null
-var player_two_end_tile = null
 var player_one_score = 0
 var player_two_score = 0
 var selected_token = null
@@ -72,12 +68,6 @@ func _ready():
 	load_tiles()
 	assign_dice()
 	
-	player_one_start_tile = player_tiles[0][0]
-	player_two_start_tile = player_tiles[1][0]
-	
-	player_one_end_tile = player_tiles[0][-1]
-	player_two_end_tile = player_tiles[1][-1]
-	
 	reroll_tiles = get_tree().get_nodes_in_group("reroll_tiles")
 	
 	# connect button press to click function
@@ -86,8 +76,8 @@ func _ready():
 	
 	# create player tokens
 	for _i in range(player_token_count):
-		player_tokens[0].append(Token.new(player_one_start_tile))
-		player_tokens[1].append(Token.new(player_two_start_tile))
+		for i in range(2):
+			player_tokens[i].append(Token.new(player_tiles[i][0]))
 	
 	# init player token counters
 	$rows/tiles/cols5/p1counter.modulate = player_colors[0]
@@ -118,7 +108,7 @@ func tile_clicked(tile):
 		# no token is selected; player is trying to select a token to play
 		else:
 			
-			if tile == player_one_end_tile or tile == player_two_end_tile:
+			if tile in get_end_tiles():
 				print("Cannot move tokens off of end tile")
 				return
 			
@@ -220,7 +210,7 @@ func end_turn(tile_played):
 	selected_token.set_tile(tile_played)
 	
 	# did token make it to the end?
-	if tile_played == player_one_end_tile or tile_played == player_two_end_tile:
+	if tile_played in get_end_tiles():
 		#selected_token.set_tile(null)
 		if cur_player == 1:
 			player_one_score += 1
@@ -255,10 +245,9 @@ func place_selected_token(tile):
 	# the currently selected token?
 	var other_token = get_player_token_on_tile(tile)
 	
-	var opponent_tokens = player_tokens[1 - (cur_player - 1)]
-	var opponent_start = player_one_start_tile
-	if cur_player == 1:
-		opponent_start = player_two_start_tile
+	var opponent = 1 - (cur_player - 1)
+	var opponent_tokens = player_tokens[opponent]
+	var opponent_start = get_end_tiles()[opponent]
 	
 	# make sure move matches roll
 	var tile_distance = get_tile_distance(selected_token.get_tile(), tile)
@@ -305,8 +294,8 @@ func place_selected_token(tile):
 # returns true if this tile has a default icon
 func is_special_tile(tile):
 	return tile in reroll_tiles \
-		or tile == player_one_start_tile or tile == player_two_start_tile \
-		or tile == player_one_end_tile or tile == player_two_end_tile
+		or tile in get_start_tiles() \
+		or tile in get_end_tiles()
 
 
 # adds pawn icon as child to node
@@ -334,21 +323,26 @@ func add_pawn_child(node):
 
 # updates the players' pawn counters
 func update_counters():
-	var start_count1 = 0
-	var start_count2 = 0
-	var end_count1 = 0
-	var end_count2 = 0
+	var start_counts = [0, 0]
+	var end_counts = [0, 0]
 	for token_list in player_tokens:
 		for t in token_list:
-			if t.get_tile() == player_one_start_tile:
-				start_count1 += 1
-			elif t.get_tile() == player_two_start_tile:
-				start_count2 += 1
-			elif t.get_tile() == player_one_end_tile:
-				end_count1 += 1
-			elif t.get_tile() == player_two_end_tile:
-				end_count2 += 1
-	$rows/tiles/cols5/p1counter/text.text = str(start_count1)
-	$rows/tiles/cols5/p2counter/text.text = str(start_count2)
-	$rows/tiles/cols6/p1counter/text.text = str(end_count1)
-	$rows/tiles/cols6/p2counter/text.text = str(end_count2)
+			for i in range(2):
+				if t.get_tile() == player_tiles[i][0]:
+					start_counts[i] += 1
+				elif t.get_tile() == get_end_tiles()[i]:
+					end_counts[i] += 1
+	$rows/tiles/cols5/p1counter/text.text = str(start_counts[0])
+	$rows/tiles/cols5/p2counter/text.text = str(start_counts[1])
+	$rows/tiles/cols6/p1counter/text.text = str(end_counts[0])
+	$rows/tiles/cols6/p2counter/text.text = str(end_counts[1])
+
+
+# returns start tiles of both players
+func get_start_tiles():
+	return [player_tiles[0][0], player_tiles[1][0]]
+
+
+# returns end tiles of both players
+func get_end_tiles():
+	return [player_tiles[0][-1], player_tiles[1][-1]]
