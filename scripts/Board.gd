@@ -1,20 +1,18 @@
 extends Control
 
 const Token = preload("res://scripts/Token.gd")
-const pawn_img = preload("res://images/chess_pawn.png")
-const die_imgs = [preload("res://images/dice_0.png"), preload("res://images/dice_1.png")]
-const player_colors = [Color(0.10, 0.25, 0.45), Color(0.45, 0.16, 0.15)]
-const player_token_count = 7
+const PAWN_IMG = preload("res://images/chess_pawn.png")
+const DICE_IMGS = [preload("res://images/dice_0.png"), preload("res://images/dice_1.png")]
+const PLAYER_COLORS = [Color(0.10, 0.25, 0.45), Color(0.45, 0.16, 0.15)]
+const PLAYER_TOKEN_COUNT = 7
 
 var cur_roll = 0
 var cur_player = 1
 var player_tokens = [[], []]
 var player_tiles = [[], []]
-var player_one_score = 0
-var player_two_score = 0
 var selected_token = null
 var reroll_tiles = null
-var die_nodes = []
+var dice_nodes = []
 
 
 # connects all buttons to player tile list
@@ -58,7 +56,7 @@ func load_tiles():
 func assign_dice():
 	for node in $rows/info.get_children():
 		if node.name.begins_with("die"):
-			die_nodes.append(node)
+			dice_nodes.append(node)
 
 
 # called when the board is loaded
@@ -75,15 +73,15 @@ func _ready():
 		btn.connect("pressed", self, "tile_clicked", [btn])
 	
 	# create player tokens
-	for _i in range(player_token_count):
+	for _i in range(PLAYER_TOKEN_COUNT):
 		for i in range(2):
 			player_tokens[i].append(Token.new(player_tiles[i][0]))
 	
 	# init player token counters
-	$rows/tiles/cols5/p1counter.modulate = player_colors[0]
-	$rows/tiles/cols5/p2counter.modulate = player_colors[1]
-	$rows/tiles/cols6/p1counter.modulate = player_colors[0]
-	$rows/tiles/cols6/p2counter.modulate = player_colors[1]
+	$rows/tiles/cols5/p1counter.modulate = PLAYER_COLORS[0]
+	$rows/tiles/cols5/p2counter.modulate = PLAYER_COLORS[1]
+	$rows/tiles/cols6/p1counter.modulate = PLAYER_COLORS[0]
+	$rows/tiles/cols6/p2counter.modulate = PLAYER_COLORS[1]
 	update_counters()
 	
 	# display the first player
@@ -135,8 +133,8 @@ func roll_dice():
 	for i in range(4):
 		var roll = randi() % 2
 		sum += roll
-		die_nodes[i].texture = die_imgs[roll]
-		die_nodes[i].modulate = player_colors[cur_player - 1]
+		dice_nodes[i].texture = DICE_IMGS[roll]
+		dice_nodes[i].modulate = PLAYER_COLORS[cur_player - 1]
 	print("Player ", str(cur_player), " rolled ", sum)
 	cur_roll = sum
 	
@@ -211,15 +209,9 @@ func end_turn(tile_played):
 	
 	# did token make it to the end?
 	if tile_played in get_end_tiles():
-		#selected_token.set_tile(null)
-		if cur_player == 1:
-			player_one_score += 1
-		else:
-			player_two_score += 1
 		
-		# end of game
-		if player_one_score == player_token_count \
-		or player_two_score == player_token_count:
+		# end of game?
+		if get_end_tokens(cur_player) == PLAYER_TOKEN_COUNT:
 			win(cur_player)
 			return
 		
@@ -304,9 +296,9 @@ func add_pawn_child(node):
 	# create icon node
 	var texture = TextureRect.new()
 	texture.name = "pawn"
-	texture.texture = pawn_img
+	texture.texture = PAWN_IMG
 	node.add_child(texture)
-	texture.modulate = player_colors[cur_player - 1]
+	texture.modulate = PLAYER_COLORS[cur_player - 1]
 	
 	# position icon in center of parent
 	texture.anchor_bottom = 0.5
@@ -323,19 +315,28 @@ func add_pawn_child(node):
 
 # updates the players' pawn counters
 func update_counters():
-	var start_counts = [0, 0]
-	var end_counts = [0, 0]
-	for token_list in player_tokens:
-		for t in token_list:
-			for i in range(2):
-				if t.get_tile() == player_tiles[i][0]:
-					start_counts[i] += 1
-				elif t.get_tile() == get_end_tiles()[i]:
-					end_counts[i] += 1
-	$rows/tiles/cols5/p1counter/text.text = str(start_counts[0])
-	$rows/tiles/cols5/p2counter/text.text = str(start_counts[1])
-	$rows/tiles/cols6/p1counter/text.text = str(end_counts[0])
-	$rows/tiles/cols6/p2counter/text.text = str(end_counts[1])
+	$rows/tiles/cols5/p1counter/text.text = str(get_start_tokens(1))
+	$rows/tiles/cols5/p2counter/text.text = str(get_start_tokens(2))
+	$rows/tiles/cols6/p1counter/text.text = str(get_end_tokens(1))
+	$rows/tiles/cols6/p2counter/text.text = str(get_end_tokens(2))
+
+
+# returns the specified player's number of tokens not yet played
+func get_start_tokens(player):
+	var score = 0
+	for t in player_tokens[player - 1]:
+		if t.get_tile() == get_start_tiles()[player - 1]:
+			score += 1
+	return score
+
+
+# returns the specified player's number of tokens in the end tile
+func get_end_tokens(player):
+	var score = 0
+	for t in player_tokens[player - 1]:
+		if t.get_tile() == get_end_tiles()[player - 1]:
+			score += 1
+	return score
 
 
 # returns start tiles of both players
