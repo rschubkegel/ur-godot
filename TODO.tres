@@ -1,0 +1,6 @@
+FEATURES
+- Networked multiplayer B)
+
+BUGS
+- Player color sometimes swaps or player icons are retained?
+  Maybe fix by changing how player tokens are added/removed from tiles.

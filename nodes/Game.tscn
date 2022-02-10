@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/Board.gd" type="Script" id=1]
 [ext_resource path="res://styles/Tile_Syle.tres" type="Theme" id=2]
@@ -8,10 +8,15 @@
 [ext_resource path="res://images/hexagon_in.png" type="Texture" id=6]
 [ext_resource path="res://images/dice_0.png" type="Texture" id=7]
 [ext_resource path="res://images/chess_pawn.png" type="Texture" id=8]
+[ext_resource path="res://styles/AndadaPro.ttf" type="DynamicFontData" id=9]
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="DynamicFont" id=3]
+size = 32
+font_data = ExtResource( 9 )
 
 [sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=2]
 
 [node name="board" type="Control"]
 anchor_right = 1.0
@@ -31,85 +36,101 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="message" type="Label" parent="rows"]
+margin_top = 45.0
+margin_right = 450.0
+margin_bottom = 84.0
+theme = ExtResource( 3 )
+custom_fonts/font = SubResource( 3 )
+text = "1st player's turn"
+align = 1
+
+[node name="HSeparator3" type="HSeparator" parent="rows"]
+margin_top = 88.0
+margin_right = 450.0
+margin_bottom = 104.0
+custom_constants/separation = 16
+custom_styles/separator = SubResource( 1 )
+
 [node name="info" type="HBoxContainer" parent="rows"]
-margin_top = 1.0
-margin_right = 400.0
-margin_bottom = 65.0
+margin_top = 108.0
+margin_right = 450.0
+margin_bottom = 172.0
 alignment = 1
 
 [node name="die1" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 24.0
-margin_right = 88.0
+margin_left = 49.0
+margin_right = 113.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
 
 [node name="VSeparator" type="VSeparator" parent="rows/info"]
-margin_left = 92.0
-margin_right = 116.0
+margin_left = 117.0
+margin_right = 141.0
 margin_bottom = 64.0
 custom_constants/separation = 24
 custom_styles/separator = SubResource( 2 )
 
 [node name="die2" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 120.0
-margin_right = 184.0
+margin_left = 145.0
+margin_right = 209.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
 
 [node name="VSeparator2" type="VSeparator" parent="rows/info"]
-margin_left = 188.0
-margin_right = 212.0
+margin_left = 213.0
+margin_right = 237.0
 margin_bottom = 64.0
 custom_constants/separation = 24
 custom_styles/separator = SubResource( 2 )
 
 [node name="die3" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 216.0
-margin_right = 280.0
+margin_left = 241.0
+margin_right = 305.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
 
 [node name="VSeparator3" type="VSeparator" parent="rows/info"]
-margin_left = 284.0
-margin_right = 308.0
+margin_left = 309.0
+margin_right = 333.0
 margin_bottom = 64.0
 custom_constants/separation = 24
 custom_styles/separator = SubResource( 2 )
 
 [node name="die4" type="TextureRect" parent="rows/info"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 312.0
-margin_right = 376.0
+margin_left = 337.0
+margin_right = 401.0
 margin_bottom = 64.0
 texture = ExtResource( 7 )
 
 [node name="HSeparator" type="HSeparator" parent="rows"]
-margin_top = 69.0
-margin_right = 400.0
-margin_bottom = 85.0
+margin_top = 176.0
+margin_right = 450.0
+margin_bottom = 192.0
 custom_constants/separation = 16
 custom_styles/separator = SubResource( 1 )
 
 [node name="tiles" type="VBoxContainer" parent="rows"]
-margin_top = 89.0
-margin_right = 400.0
-margin_bottom = 693.0
+margin_top = 196.0
+margin_right = 450.0
+margin_bottom = 800.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="cols1" type="HBoxContainer" parent="rows/tiles"]
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 72.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="btn1" type="Button" parent="rows/tiles/cols1" groups=["player_one_tiles", "reroll_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -130,16 +151,16 @@ __meta__ = {
 }
 
 [node name="btn2" type="Button" parent="rows/tiles/cols1" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols1" groups=["player_two_tiles", "reroll_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -161,30 +182,30 @@ __meta__ = {
 
 [node name="cols2" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 76.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 148.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="btn1" type="Button" parent="rows/tiles/cols2" groups=["player_one_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn2" type="Button" parent="rows/tiles/cols2" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols2" groups=["player_two_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -192,30 +213,30 @@ text = " "
 
 [node name="cols3" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 152.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 224.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="btn1" type="Button" parent="rows/tiles/cols3" groups=["player_one_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn2" type="Button" parent="rows/tiles/cols3" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols3" groups=["player_two_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -223,22 +244,22 @@ text = " "
 
 [node name="cols4" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 228.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 300.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="btn1" type="Button" parent="rows/tiles/cols4" groups=["player_one_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn2" type="Button" parent="rows/tiles/cols4" groups=["player_one_tiles", "player_two_tiles", "reroll_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -259,8 +280,8 @@ __meta__ = {
 }
 
 [node name="btn3" type="Button" parent="rows/tiles/cols4" groups=["player_two_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -268,15 +289,15 @@ text = " "
 
 [node name="cols5" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 304.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 376.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="p1counter" type="TextureRect" parent="rows/tiles/cols5"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 20.0
-margin_right = 84.0
+margin_left = 45.0
+margin_right = 109.0
 margin_bottom = 72.0
 texture = ExtResource( 8 )
 __meta__ = {
@@ -293,8 +314,8 @@ __meta__ = {
 }
 
 [node name="btn1" type="Button" parent="rows/tiles/cols5" groups=["player_one_tiles", "start_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -315,16 +336,16 @@ __meta__ = {
 }
 
 [node name="btn2" type="Button" parent="rows/tiles/cols5" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols5" groups=["player_two_tiles", "start_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -346,8 +367,8 @@ __meta__ = {
 
 [node name="p2counter" type="TextureRect" parent="rows/tiles/cols5"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 316.0
-margin_right = 380.0
+margin_left = 341.0
+margin_right = 405.0
 margin_bottom = 72.0
 texture = ExtResource( 8 )
 __meta__ = {
@@ -366,15 +387,15 @@ __meta__ = {
 
 [node name="cols6" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 380.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 452.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="p1counter" type="TextureRect" parent="rows/tiles/cols6"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 20.0
-margin_right = 84.0
+margin_left = 45.0
+margin_right = 109.0
 margin_bottom = 72.0
 texture = ExtResource( 8 )
 __meta__ = {
@@ -391,8 +412,8 @@ __meta__ = {
 }
 
 [node name="btn1" type="Button" parent="rows/tiles/cols6" groups=["end_tiles", "player_one_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -416,16 +437,16 @@ __meta__ = {
 }
 
 [node name="btn2" type="Button" parent="rows/tiles/cols6" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols6" groups=["end_tiles", "player_two_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -447,8 +468,8 @@ __meta__ = {
 
 [node name="p2counter" type="TextureRect" parent="rows/tiles/cols6"]
 modulate = Color( 0.501961, 0.376471, 0.25098, 1 )
-margin_left = 316.0
-margin_right = 380.0
+margin_left = 341.0
+margin_right = 405.0
 margin_bottom = 72.0
 texture = ExtResource( 8 )
 __meta__ = {
@@ -467,14 +488,14 @@ __meta__ = {
 
 [node name="cols7" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 456.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 528.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="btn1" type="Button" parent="rows/tiles/cols7" groups=["player_one_tiles", "reroll_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -495,16 +516,16 @@ __meta__ = {
 }
 
 [node name="btn2" type="Button" parent="rows/tiles/cols7" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols7" groups=["player_two_tiles", "reroll_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
@@ -526,52 +547,52 @@ __meta__ = {
 
 [node name="cols8" type="HBoxContainer" parent="rows/tiles"]
 margin_top = 532.0
-margin_right = 400.0
+margin_right = 450.0
 margin_bottom = 604.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="btn1" type="Button" parent="rows/tiles/cols8" groups=["player_one_tiles", "tiles"]]
-margin_left = 88.0
-margin_right = 160.0
+margin_left = 113.0
+margin_right = 185.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn2" type="Button" parent="rows/tiles/cols8" groups=["player_one_tiles", "player_two_tiles", "tiles"]]
-margin_left = 164.0
-margin_right = 236.0
+margin_left = 189.0
+margin_right = 261.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="btn3" type="Button" parent="rows/tiles/cols8" groups=["player_two_tiles", "tiles"]]
-margin_left = 240.0
-margin_right = 312.0
+margin_left = 265.0
+margin_right = 337.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 72, 72 )
 theme = ExtResource( 2 )
 text = " "
 
 [node name="HSeparator2" type="HSeparator" parent="rows"]
-margin_top = 697.0
-margin_right = 400.0
-margin_bottom = 713.0
+margin_top = 804.0
+margin_right = 450.0
+margin_bottom = 820.0
 custom_constants/separation = 16
 custom_styles/separator = SubResource( 1 )
 
 [node name="actions" type="HBoxContainer" parent="rows"]
-margin_top = 717.0
-margin_right = 400.0
-margin_bottom = 748.0
+margin_top = 824.0
+margin_right = 450.0
+margin_bottom = 855.0
 theme = ExtResource( 2 )
 alignment = 1
 
 [node name="menu_button" type="Button" parent="rows/actions"]
-margin_left = 88.0
-margin_right = 312.0
+margin_left = 113.0
+margin_right = 337.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 224, 0 )
 theme = ExtResource( 3 )
@@ -581,4 +602,9 @@ text = "Main Menu"
 wait_time = 2.0
 one_shot = true
 
+[node name="NoMovesTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="timeout" from="ZeroRollTimer" to="." method="switch_player"]
+[connection signal="timeout" from="NoMovesTimer" to="." method="switch_player"]
