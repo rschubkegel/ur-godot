@@ -37,18 +37,18 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="menu/HBoxContainer"]
-margin_left = 33.0
-margin_right = 367.0
-margin_bottom = 750.0
+margin_left = 58.0
+margin_right = 392.0
+margin_bottom = 900.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Title" type="Label" parent="menu/HBoxContainer/VBoxContainer"]
-margin_top = 226.0
+margin_top = 301.0
 margin_right = 334.0
-margin_bottom = 383.0
+margin_bottom = 458.0
 theme = ExtResource( 3 )
 custom_colors/font_color = Color( 0.501961, 0.376471, 0.25098, 1 )
 custom_fonts/font = SubResource( 1 )
@@ -57,16 +57,16 @@ Game of Ur"
 align = 1
 
 [node name="HSeparator" type="HSeparator" parent="menu/HBoxContainer/VBoxContainer"]
-margin_top = 387.0
+margin_top = 462.0
 margin_right = 334.0
-margin_bottom = 419.0
+margin_bottom = 494.0
 custom_constants/separation = 32
 custom_styles/separator = SubResource( 2 )
 
 [node name="play_button" type="Button" parent="menu/HBoxContainer/VBoxContainer"]
-margin_top = 423.0
+margin_top = 498.0
 margin_right = 334.0
-margin_bottom = 471.0
+margin_bottom = 546.0
 rect_min_size = Vector2( 96, 48 )
 theme = ExtResource( 3 )
 text = "Play"
@@ -75,9 +75,9 @@ __meta__ = {
 }
 
 [node name="help_button" type="Button" parent="menu/HBoxContainer/VBoxContainer"]
-margin_top = 475.0
+margin_top = 550.0
 margin_right = 334.0
-margin_bottom = 523.0
+margin_bottom = 598.0
 rect_min_size = Vector2( 96, 48 )
 theme = ExtResource( 3 )
 disabled = true
