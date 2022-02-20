@@ -15,6 +15,7 @@ const MENU_LOBBY_BTN_PATH = 'hbox/vbox/menu'
 const CONNECT_BTN_PATH = 'vbox/connect'
 const CONNECT_IP_PATH = 'vbox/hbox/ip_selector'
 
+# Reference: https://docs.godotengine.org/en/stable/tutorials/networking/high_level_multiplayer.html
 const IP_FORMAT = '192\\.168\\.\\d+\\.\\d+'
 const SERVER_PORT = 8000
 const MAX_PLAYERS = 2
@@ -59,9 +60,16 @@ func join_dialog(menu):
 func join_game(popup, menu):
 	var ip = '192.168.0.%d' % popup.get_node(CONNECT_IP_PATH).value
 	popup.queue_free()
-	menu.queue_free()
+	
 	print('Joinging game at %s' % ip)
-	# TODO actually join game
+	var peer = NetworkedMultiplayerENet.new()
+	var e = peer.create_client(ip, SERVER_PORT)
+	if e:
+		print('Could not connect to server at %s' % ip)
+		peer.free()
+	else:
+		get_tree().network_peer = peer
+		menu.queue_free()
 
 
 # start server and enter lobby
@@ -69,24 +77,33 @@ func host_game():
 	var lobby = Lobby.instance()
 	add_child(lobby)
 	
-	lobby.get_node(IP_LBL_PATH).text = 'Server hosted at %s' % init_server()
-	
-	lobby.get_node(MENU_LOBBY_BTN_PATH).connect('pressed', self, 'main_menu')
-	lobby.get_node(MENU_LOBBY_BTN_PATH).connect('pressed', lobby, 'queue_free')
+	var ip = init_server()
+	if ip:
+		lobby.get_node(IP_LBL_PATH).text = 'Server hosted at %s' % ip
+		lobby.get_node(MENU_LOBBY_BTN_PATH).connect('pressed', self, 'main_menu')
+		lobby.get_node(MENU_LOBBY_BTN_PATH).connect('pressed', lobby, 'queue_free')
+	else:
+		print('Could not create server')
 
-
-# create a game server
+# create a game server and return its ip address on success or null on failure
 func init_server():
 	var peer = NetworkedMultiplayerENet.new()
-	peer.create_server(SERVER_PORT, MAX_PLAYERS)
+	var e = peer.create_server(SERVER_PORT, MAX_PLAYERS)
+	if e:
+		print('Error: could not create server')
+		peer.queue_free()
+		return null
+	
 	get_tree().network_peer = peer
 	
+	# connect network event callbacks
 	get_tree().connect('network_peer_connected', self, 'player_connected')
+	get_tree().connect('network_peer_disconnected', self, 'player_disconnected')
 	
 	return get_ip()
 
 
-# gets the local IPv4 that server will be hosted on
+# returns the local IPv4 that server will be hosted on or null on failure
 func get_ip():
 	# get all IPv4 and IPv6 for computer and search for the correct format
 	var addresses = IP.get_local_addresses()
@@ -99,13 +116,12 @@ func get_ip():
 			ip = addresses[i]
 			break
 		i += 1
-	
-	if not ip:
-		print('No IP found matching the format ' + IP_FORMAT)
-		
-	# Return desired ip
 	return ip
 
 
-func player_connected():
-	print('Player connected')
+func player_connected(id):
+	print('Player %s connected' % str(id))
+
+
+func player_disconnected(id):
+	print('Player %s disconnected' % str(id))
