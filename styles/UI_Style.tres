@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=7 format=2]
+[gd_resource type="Theme" load_steps=8 format=2]
 
 [ext_resource path="res://styles/AndadaPro.ttf" type="DynamicFontData" id=1]
 
@@ -56,6 +56,10 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 shadow_color = Color( 0, 0, 0, 0.25098 )
 
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.8, 0.666667, 0.501961, 1 )
+border_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+
 [sub_resource type="DynamicFont" id=5]
 size = 22
 use_filter = true
@@ -74,3 +78,10 @@ Button/styles/focus = SubResource( 2 )
 Button/styles/hover = SubResource( 2 )
 Button/styles/normal = SubResource( 3 )
 Button/styles/pressed = SubResource( 4 )
+Label/colors/font_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+PopupMenu/colors/font_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+PopupMenu/colors/font_color_accel = Color( 0.501961, 0.376471, 0.25098, 1 )
+PopupMenu/colors/font_color_disabled = Color( 0.501961, 0.376471, 0.25098, 0.533333 )
+PopupMenu/colors/font_color_hover = Color( 0.501961, 0.376471, 0.25098, 1 )
+PopupMenu/colors/font_color_separator = Color( 0.501961, 0.376471, 0.25098, 1 )
+PopupMenu/styles/panel = SubResource( 6 )

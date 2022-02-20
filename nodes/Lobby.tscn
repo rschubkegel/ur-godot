@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://styles/UI_Style.tres" type="Theme" id=2]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+draw_center = false
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+
+[node name="menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hbox" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="vbox" type="VBoxContainer" parent="hbox"]
+margin_left = 71.0
+margin_right = 378.0
+margin_bottom = 900.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ip_label" type="Label" parent="hbox/vbox"]
+margin_top = 351.0
+margin_right = 307.0
+margin_bottom = 378.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+text = "Server hosted at 127.0.0.1"
+align = 1
+
+[node name="msg_label" type="Label" parent="hbox/vbox"]
+margin_top = 382.0
+margin_right = 307.0
+margin_bottom = 409.0
+theme = ExtResource( 2 )
+custom_colors/font_color = Color( 0.501961, 0.376471, 0.25098, 1 )
+text = "Waiting for opponent to join..."
+align = 1
+
+[node name="HSeparator" type="HSeparator" parent="hbox/vbox"]
+margin_top = 413.0
+margin_right = 307.0
+margin_bottom = 445.0
+custom_constants/separation = 32
+custom_styles/separator = SubResource( 2 )
+
+[node name="play" type="Button" parent="hbox/vbox"]
+margin_top = 449.0
+margin_right = 307.0
+margin_bottom = 497.0
+rect_min_size = Vector2( 96, 48 )
+theme = ExtResource( 2 )
+disabled = true
+text = "Play"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="menu" type="Button" parent="hbox/vbox"]
+margin_top = 501.0
+margin_right = 307.0
+margin_bottom = 549.0
+rect_min_size = Vector2( 96, 48 )
+theme = ExtResource( 2 )
+text = "Menu"
+__meta__ = {
+"_edit_use_anchors_": false
+}

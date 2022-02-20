@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://styles/UI_Style.tres" type="Theme" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.913725, 0.913725, 0.913725, 1 )
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color( 0.8, 0.666667, 0.501961, 1 )
+
+[node name="popup" type="PopupPanel"]
+visible = true
+margin_right = 229.0
+margin_bottom = 72.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+popup_exclusive = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="vbox" type="VBoxContainer" parent="."]
+margin_left = 15.0
+margin_top = 8.0
+margin_right = 214.0
+margin_bottom = 80.0
+rect_pivot_offset = Vector2( -16, -9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hbox" type="HBoxContainer" parent="vbox"]
+margin_right = 199.0
+margin_bottom = 37.0
+alignment = 1
+
+[node name="prefix" type="Label" parent="vbox/hbox"]
+margin_top = 5.0
+margin_right = 109.0
+margin_bottom = 32.0
+theme = ExtResource( 1 )
+text = "192.168.0."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ip_selector" type="SpinBox" parent="vbox/hbox"]
+margin_left = 113.0
+margin_right = 199.0
+margin_bottom = 37.0
+theme = ExtResource( 1 )
+max_value = 99.0
+rounded = true
+
+[node name="connect" type="Button" parent="vbox"]
+margin_top = 41.0
+margin_right = 199.0
+margin_bottom = 72.0
+text = "Connect"
