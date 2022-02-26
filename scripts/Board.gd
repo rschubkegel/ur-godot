@@ -10,13 +10,13 @@ var cur_roll = null
 var cur_player = 0
 var player_tokens = [[], []]
 var player_tiles = [[], []]
-var selected_token = null
+remotesync var selected_token_idx = null
 var reroll_tiles = null
 var dice_nodes = []
 
 
 # connects all buttons to player tile list
-func load_player_tiles():
+func _load_player_tiles():
 	player_tiles[0].append($rows/tiles/cols5/btn1)
 	player_tiles[0].append($rows/tiles/cols4/btn1)
 	player_tiles[0].append($rows/tiles/cols3/btn1)
@@ -53,14 +53,14 @@ func load_player_tiles():
 
 
 # assign scene nodes to array
-func assign_dice():
+func _assign_dice():
 	for node in $rows/info.get_children():
 		if node.name.begins_with('die'):
 			dice_nodes.append(node)
 
 
 # sets the text and color of player token counters
-func init_counters():
+func _init_counters():
 	$rows/tiles/cols5/p1counter.modulate = PLAYER_COLORS[0]
 	$rows/tiles/cols5/p2counter.modulate = PLAYER_COLORS[1]
 	$rows/tiles/cols6/p1counter.modulate = PLAYER_COLORS[0]
@@ -72,8 +72,8 @@ func init_counters():
 func _ready():
 	
 	# init variables
-	load_player_tiles()
-	assign_dice()
+	_load_player_tiles()
+	_assign_dice()
 	reroll_tiles = get_tree().get_nodes_in_group('reroll_tiles')
 	
 	# connect button press to click function
@@ -102,7 +102,7 @@ func _ready():
 			token.rect_position.y -= token.rect_size.y / 2
 	
 	# initialize UI
-	init_counters()
+	_init_counters()
 	set_message("%s's turn" % PLAYER_NAMES[cur_player])
 	
 	# roll dice (first move)
@@ -110,7 +110,7 @@ func _ready():
 	rpc('roll_dice')
 
 
-# called by button when pressed
+# Called by button when pressed. This function calls other move functions.
 # ┌────────────────┐
 # │                │
 # │ tile_clicked() │
@@ -124,6 +124,8 @@ func _ready():
 # │ confirm_move() │
 # │                │
 # └────────────────┘
+#
+# param:	tile Is the button that was clicked.
 func tile_clicked(tile):
 	# when playing online, only allow player to move if it's their turn
 	if get_tree().network_peer and \
@@ -136,33 +138,46 @@ func tile_clicked(tile):
 	if cur_roll > 0 and tile in player_tiles[cur_player]:
 		
 		# token is currently selected; player is trying to place tile
-		if selected_token:
+		if selected_token_idx != null:
 			
 			# allow deselection of tokens
-			if selected_token.get_parent() == tile:
+			if player_tokens[cur_player][selected_token_idx].get_parent() == tile:
+				print('Deselected token %d' % selected_token_idx)
 				tile.modulate = Color.white
-				selected_token = null
+				rset('selected_token_idx', null)
 			
 			# move if valid
-			elif is_valid_move(cur_player, selected_token, tile):
-				confirm_move(tile)
+			elif is_valid_move(cur_player, selected_token_idx, player_tiles[cur_player].find(tile)):
+				rpc('confirm_move', player_tiles[cur_player].find(tile))
 		
 		# no token is selected; player is trying to select a token to play
 		else:
-			selected_token = get_player_token_on_tile(tile)
-			if selected_token \
-			and not tile in get_end_tiles() \
-			and selected_token in player_tokens[cur_player]:
-				tile.modulate = Color.yellow
+			var token = get_player_token_on_tile(tile)
+			if token:
+				var tok_idx = player_tokens[cur_player].find(token)
+				if tok_idx >= 0 and not tile in get_end_tiles():
+					rset('selected_token_idx', tok_idx)
+					tile.modulate = Color.yellow
+					print('Selected token %d' % tok_idx)
 
 
-# if possible, places current player's token on the board
-# this is where most of the game rules reside
-func is_valid_move(player, token, to_tile):
+# Returns true if the player can move the token to the requested tile.
+# This is where most of the game rules reside.
+#
+# param:	player The player (number) asking to move
+# param:	token_idx The index of the token to move
+#			in the current player's list of tokens
+# param:	to_tile_idx The index of the tile in the current player's
+#			list of tiles that the token will be moved to
+# return:	true if the move is valid or false if not
+func is_valid_move(player, token_idx, to_tile_idx):
 	var result = false
-	var tile_distance = get_tile_distance(token.get_parent(), to_tile, player_tiles[player])
+	var cur_p_tiles = player_tiles[cur_player]
+	var from_tile = player_tokens[cur_player][token_idx].get_parent()
+	var to_tile = cur_p_tiles[to_tile_idx]
+	var tile_distance = get_tile_distance(from_tile, to_tile, cur_p_tiles)
+	
 	if tile_distance == cur_roll:
-		
 		# what token is at the tile where the player is trying to place
 		# the currently selected token?
 		var other_token = get_player_token_on_tile(to_tile)
@@ -179,34 +194,43 @@ func is_valid_move(player, token, to_tile):
 	return result
 
 
-# called when a move has been successfully made by current player
-func confirm_move(tile_played):
+# Called when a move has been successfully made by current player.
+# Updates tokens on board.
+#
+# pre:		selected_token is set
+# param:	tile_index Is the index of the tile
+#			in the current player's list of tiles
+remotesync func confirm_move(tile_index):
 	# move opponent's tokens if necessary
-	for child in tile_played.get_children():
+	for child in player_tiles[cur_player][tile_index].get_children():
 		if child in player_tokens[opponent(cur_player)]:
-			tile_played.remove_child(child)
+			player_tiles[cur_player][tile_index].remove_child(child)
 			get_start_tiles()[opponent(cur_player)].add_child(child)
 			child.visible = false
 	
 	# reset tiles and move the selected token
-	reset_tile(selected_token.get_parent())
-	reset_tile(tile_played)
-	selected_token.get_parent().remove_child(selected_token)
-	tile_played.add_child(selected_token)
-	selected_token.visible = not (tile_played in get_start_tiles() or tile_played in get_end_tiles())
+	var moving_token = player_tokens[cur_player][selected_token_idx]
+	var parent = moving_token.get_parent()
+	reset_tile(parent)
+	reset_tile(player_tiles[cur_player][tile_index])
+	parent.remove_child(moving_token)
+	player_tiles[cur_player][tile_index].add_child(moving_token)
+	moving_token.visible = not \
+		(  player_tiles[cur_player][tile_index] in get_start_tiles()
+		or player_tiles[cur_player][tile_index] in get_end_tiles())
 	
 	# deselect token, update UI
-	selected_token = null
+	rset('selected_token_idx', null)
 	update_counters()
 	
 	# game over?
-	if tile_played in get_end_tiles():
+	if player_tiles[cur_player][tile_index] in get_end_tiles():
 		if get_end_token_count(cur_player) == PLAYER_TOKEN_COUNT:
 			win(cur_player)
 			return
 	
 	# roll again if tile was reroll
-	if tile_played in reroll_tiles:
+	if player_tiles[cur_player][tile_index] in reroll_tiles:
 		rpc('roll_dice')
 	else:
 		switch_player()
@@ -222,7 +246,10 @@ master func roll_dice():
 	rpc('set_roll', nums)
 
 
-# sets the roll on all peers
+# Sets the roll variable and updates UI accordingly.
+#
+# param:	nums is a list of four numbers, each being 0 or 1;
+#			the sum of these numbers is the player's roll
 remotesync func set_roll(nums):
 	var roll = 0
 	for i in range(len(nums)):
@@ -338,7 +365,7 @@ func can_play(player, roll):
 		var to_index = p_tiles.find(token.get_parent()) + roll
 		if to_index < len(p_tiles):
 			var to_tile = p_tiles[to_index]
-			if is_valid_move(player, token, to_tile):
+			if is_valid_move(player, player_tokens[cur_player].find(token), player_tiles[cur_player].find(to_tile)):
 				return true
 	return false
 
