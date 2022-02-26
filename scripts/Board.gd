@@ -1,12 +1,12 @@
 extends Control
 
-const PAWN_IMG = preload("res://images/chess_pawn.png")
-const DICE_IMGS = [preload("res://images/dice_0.png"), preload("res://images/dice_1.png")]
+const PAWN_IMG = preload('res://images/chess_pawn.png')
+const DICE_IMGS = [preload('res://images/dice_0.png'), preload('res://images/dice_1.png')]
 const PLAYER_COLORS = [Color(0.10, 0.25, 0.45), Color(0.45, 0.16, 0.15)]
-const PLAYER_NAMES = ["Player One", "Player Two"]
+const PLAYER_NAMES = ['Player One', 'Player Two']
 const PLAYER_TOKEN_COUNT = 2
 
-var cur_roll = 0
+var cur_roll = null
 var cur_player = 0
 var player_tokens = [[], []]
 var player_tiles = [[], []]
@@ -55,7 +55,7 @@ func load_player_tiles():
 # assign scene nodes to array
 func assign_dice():
 	for node in $rows/info.get_children():
-		if node.name.begins_with("die"):
+		if node.name.begins_with('die'):
 			dice_nodes.append(node)
 
 
@@ -74,17 +74,17 @@ func _ready():
 	# init variables
 	load_player_tiles()
 	assign_dice()
-	reroll_tiles = get_tree().get_nodes_in_group("reroll_tiles")
+	reroll_tiles = get_tree().get_nodes_in_group('reroll_tiles')
 	
 	# connect button press to click function
-	for btn in get_tree().get_nodes_in_group("tiles"):
-		btn.connect("pressed", self, "tile_clicked", [btn])
+	for btn in get_tree().get_nodes_in_group('tiles'):
+		btn.connect('pressed', self, 'tile_clicked', [btn])
 	
 	# create player tokens
 	for i in range(2):
 		for j in range(PLAYER_TOKEN_COUNT):
 			var token = TextureRect.new()
-			token.name = "token%d" % j
+			token.name = 'token%d' % j
 			token.texture = PAWN_IMG
 			token.modulate = PLAYER_COLORS[i]
 			token.visible = false
@@ -107,7 +107,7 @@ func _ready():
 	
 	# roll dice (first move)
 	randomize()
-	roll_dice()
+	rpc('roll_dice')
 
 
 # called by button when pressed
@@ -125,6 +125,12 @@ func _ready():
 # │                │
 # └────────────────┘
 func tile_clicked(tile):
+	# when playing online, only allow player to move if it's their turn
+	if get_tree().network_peer and \
+	not ((get_tree().is_network_server() and cur_player == 0) \
+	or (not get_tree().is_network_server() and cur_player == 1)):
+			return
+	
 	# only do something with a tile in the current player's path
 	# when that player's roll is greater than 0
 	if cur_roll > 0 and tile in player_tiles[cur_player]:
@@ -201,39 +207,48 @@ func confirm_move(tile_played):
 	
 	# roll again if tile was reroll
 	if tile_played in reroll_tiles:
-		roll_dice()
+		rpc('roll_dice')
 	else:
 		switch_player()
 
 
-# return the sum of four "2-sided" dice
-func roll_dice():
-	var sum = 0
+# set roll variable to sum of four '2-sided' dice
+master func roll_dice():
+	var nums = []
 	for i in range(4):
 		var roll = randi() % 2
-		sum += roll
-		dice_nodes[i].texture = DICE_IMGS[roll]
+		nums.append(roll)
+	
+	rpc('set_roll', nums)
+
+
+# sets the roll on all peers
+remotesync func set_roll(nums):
+	var roll = 0
+	for i in range(len(nums)):
+		roll += nums[i]
+		dice_nodes[i].texture = DICE_IMGS[nums[i]]
 		dice_nodes[i].modulate = PLAYER_COLORS[cur_player]
-	cur_roll = sum
+	cur_roll = roll
 	
 	# wait a bit before switching players so user sees the roll was 0
 	if cur_roll == 0:
 		cur_roll = -1
-		set_message("Tough luck %s!" % PLAYER_NAMES[cur_player])
+		set_message('Tough luck %s!' % PLAYER_NAMES[cur_player])
 		$ZeroRollTimer.start()
 	
 	# player's turn is skipped if they have no valid moves
 	elif not can_play(cur_player, cur_roll):
 		cur_roll = -1
-		set_message("No available moves")
+		set_message('No available moves')
 		$NoMovesTimer.start()
 
 
 # switch player and roll dice
-func switch_player():
+remotesync func switch_player():
 	cur_player = opponent(cur_player)
 	set_message("%s's turn" % PLAYER_NAMES[cur_player])
-	roll_dice()
+	rpc('roll_dice')
 
 
 # return distance between two tiles
@@ -245,7 +260,7 @@ func get_tile_distance(from, to, tile_list):
 func get_player_token_on_tile(tile):
 	var result = null
 	for child in tile.get_children():
-		if child.name.begins_with("token"):
+		if child.name.begins_with('token'):
 			result = child
 	return result
 
@@ -256,7 +271,7 @@ func reset_tile(tile):
 	
 	# show regular icon
 	if is_special_tile(tile):
-		tile.get_node("TextureRect").visible = true
+		tile.get_node('TextureRect').visible = true
 	
 	# remove highlihgt
 	tile.modulate = Color.white
@@ -264,9 +279,9 @@ func reset_tile(tile):
 
 # game over!
 func win(player):
-	for btn in get_tree().get_nodes_in_group("tiles"):
+	for btn in get_tree().get_nodes_in_group('tiles'):
 		btn.disabled = true
-	set_message("%s wins!" % PLAYER_NAMES[player])
+	set_message('%s wins!' % PLAYER_NAMES[player])
 
 
 # returns true if this tile has a default icon
