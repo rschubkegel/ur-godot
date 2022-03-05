@@ -143,7 +143,6 @@ func tile_clicked(tile):
 			
 			# allow deselection of tokens
 			if player_tokens[cur_player][selected_token_idx].get_parent() == tile:
-				print('Deselected token %d' % selected_token_idx)
 				tile.modulate = Color.white
 				rset('selected_token_idx', null)
 			
@@ -159,7 +158,6 @@ func tile_clicked(tile):
 				if tok_idx >= 0 and not tile in get_end_tiles():
 					rset('selected_token_idx', tok_idx)
 					tile.modulate = Color.yellow
-					print('Selected token %d' % tok_idx)
 
 
 # Returns true if the player can move the token to the requested tile.
@@ -245,7 +243,7 @@ func roll_dice():
 		return
 	
 	var nums = []
-	for i in range(4):
+	for _i in range(4):
 		var roll = randi() % 2
 		nums.append(roll)
 	
