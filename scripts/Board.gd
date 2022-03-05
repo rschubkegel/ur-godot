@@ -107,7 +107,8 @@ func _ready():
 	
 	# roll dice (first move)
 	randomize()
-	rpc('roll_dice')
+	if get_tree().is_network_server():
+		roll_dice()
 
 
 # Called by button when pressed. This function calls other move functions.
@@ -231,13 +232,18 @@ remotesync func confirm_move(tile_index):
 	
 	# roll again if tile was reroll
 	if player_tiles[cur_player][tile_index] in reroll_tiles:
-		rpc('roll_dice')
+		if get_tree().is_network_server():
+			roll_dice()
 	else:
 		switch_player()
 
 
 # set roll variable to sum of four '2-sided' dice
-master func roll_dice():
+# NOTE: should only ever be called by server!
+func roll_dice():
+	if not get_tree().is_network_server():
+		return
+	
 	var nums = []
 	for i in range(4):
 		var roll = randi() % 2
@@ -262,20 +268,23 @@ remotesync func set_roll(nums):
 	if cur_roll == 0:
 		cur_roll = -1
 		set_message('Tough luck %s!' % PLAYER_NAMES[cur_player])
-		$ZeroRollTimer.start()
+		if get_tree().is_network_server():
+			$ZeroRollTimer.start()
 	
 	# player's turn is skipped if they have no valid moves
 	elif not can_play(cur_player, cur_roll):
 		cur_roll = -1
 		set_message('No available moves')
-		$NoMovesTimer.start()
+		if get_tree().is_network_server():
+			$NoMovesTimer.start()
 
 
 # switch player and roll dice
 remotesync func switch_player():
 	cur_player = opponent(cur_player)
 	set_message("%s's turn" % PLAYER_NAMES[cur_player])
-	rpc('roll_dice')
+	if get_tree().is_network_server():
+		roll_dice()
 
 
 # return distance between two tiles

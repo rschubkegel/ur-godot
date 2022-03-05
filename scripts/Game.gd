@@ -1,6 +1,7 @@
 extends Node
 
 signal playing
+signal menu
 
 export (PackedScene) var MainMenu
 export (PackedScene) var Lobby
@@ -37,14 +38,16 @@ func _ready():
 
 # add menu to tree and connect signals
 func main_menu():
+	get_tree().network_peer = null # dump old server
+	emit_signal('menu')
+	
+	# add main menu node to tree
 	var menu = MainMenu.instance()
 	add_child(menu)
 	menu.get_node(PLAY_BTN_PATH).connect('pressed', self, 'play')
-	menu.get_node(PLAY_BTN_PATH).connect('pressed', menu, 'queue_free')
-	
+	connect('playing', menu, 'queue_free')
 	menu.get_node(HOST_BTN_PATH).connect('pressed', self, 'host_game')
 	menu.get_node(HOST_BTN_PATH).connect('pressed', menu, 'queue_free')
-	
 	menu.get_node(JOIN_BTN_PATH).connect('pressed', self, 'join_dialog', [menu])
 
 
@@ -54,7 +57,7 @@ func play():
 	var game = Game.instance()
 	add_child(game)
 	game.get_node(MENU_BTN_PATH).connect('pressed', self, 'main_menu')
-	game.get_node(MENU_BTN_PATH).connect('pressed', game, 'queue_free')
+	connect('menu', game, 'queue_free')
 
 
 # show dialog to connect to existing game on the network
@@ -91,7 +94,7 @@ func host_game():
 	if ip:
 		lobby.get_node(IP_LBL_PATH).text = 'Server hosted at %s' % ip
 		lobby.get_node(MENU_LOBBY_BTN_PATH).connect('pressed', self, 'main_menu')
-		lobby.get_node(MENU_LOBBY_BTN_PATH).connect('pressed', lobby, 'queue_free')
+		connect('menu', lobby, 'queue_free')
 		connect('playing', lobby, 'queue_free')
 	else:
 		print('Could not create server')
@@ -103,7 +106,7 @@ func init_server():
 	var e = peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	if e:
 		print('Error: could not create server')
-		peer.queue_free()
+		get_tree().network_peer = null
 		return null
 	
 	get_tree().network_peer = peer
@@ -134,8 +137,9 @@ func player_connected(id):
 	play()
 
 
-# called on server and client
+# called on server
 func player_disconnected(id):
+	main_menu()
 	print('Player %s disconnected' % str(id))
 	get_tree().set_refuse_new_network_connections(false)
 
@@ -152,4 +156,5 @@ func connected_fail():
 
 # called on client
 func server_disconnected():
+	main_menu()
 	print("Server disconnected")
