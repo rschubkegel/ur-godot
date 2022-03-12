@@ -4,7 +4,10 @@ const PAWN_IMG = preload('res://images/chess_pawn.png')
 const DICE_IMGS = [preload('res://images/dice_0.png'), preload('res://images/dice_1.png')]
 const PLAYER_COLORS = [Color(0.10, 0.25, 0.45), Color(0.45, 0.16, 0.15)]
 const PLAYER_NAMES = ['Player One', 'Player Two']
-const PLAYER_TOKEN_COUNT = 2
+const PLAYER_TOKEN_COUNT = 7
+
+# to be connected by Game.gd on screen change
+export(NodePath) var menu_button
 
 var cur_roll = null
 var cur_player = 0

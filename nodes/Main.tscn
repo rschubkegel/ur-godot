@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://styles/AndadaPro.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://styles/UI_Style.tres" type="Theme" id=2]
+[ext_resource path="res://scripts/MainMenu.gd" type="Script" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 64
@@ -18,9 +19,13 @@ border_color = Color( 0.501961, 0.376471, 0.25098, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 2 )
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+local_button = NodePath("hbox/vbox/play_local")
+host_button = NodePath("hbox/vbox/hbox/host")
+join_button = NodePath("hbox/vbox/hbox/join")
 
 [node name="hbox" type="HBoxContainer" parent="."]
 anchor_right = 1.0
@@ -31,18 +36,18 @@ __meta__ = {
 }
 
 [node name="vbox" type="VBoxContainer" parent="hbox"]
-margin_left = 58.0
-margin_right = 392.0
-margin_bottom = 900.0
+margin_left = 8.0
+margin_right = 342.0
+margin_bottom = 700.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Title" type="Label" parent="hbox/vbox"]
-margin_top = 275.0
+margin_top = 175.0
 margin_right = 334.0
-margin_bottom = 432.0
+margin_bottom = 332.0
 theme = ExtResource( 2 )
 custom_colors/font_color = Color( 0.501961, 0.376471, 0.25098, 1 )
 custom_fonts/font = SubResource( 1 )
@@ -51,27 +56,28 @@ Game of Ur"
 align = 1
 
 [node name="HSeparator" type="HSeparator" parent="hbox/vbox"]
-margin_top = 436.0
+margin_top = 336.0
 margin_right = 334.0
-margin_bottom = 468.0
+margin_bottom = 368.0
 custom_constants/separation = 32
 custom_styles/separator = SubResource( 2 )
 
 [node name="play_local" type="Button" parent="hbox/vbox"]
-margin_top = 472.0
+margin_top = 372.0
 margin_right = 334.0
-margin_bottom = 520.0
+margin_bottom = 420.0
 rect_min_size = Vector2( 96, 48 )
 theme = ExtResource( 2 )
+disabled = true
 text = "Play Local"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="hbox" type="HBoxContainer" parent="hbox/vbox"]
-margin_top = 524.0
+margin_top = 424.0
 margin_right = 334.0
-margin_bottom = 572.0
+margin_bottom = 472.0
 alignment = 1
 
 [node name="host" type="Button" parent="hbox/vbox/hbox"]
@@ -98,9 +104,9 @@ __meta__ = {
 }
 
 [node name="help_button" type="Button" parent="hbox/vbox"]
-margin_top = 576.0
+margin_top = 476.0
 margin_right = 334.0
-margin_bottom = 624.0
+margin_bottom = 524.0
 rect_min_size = Vector2( 96, 48 )
 theme = ExtResource( 2 )
 disabled = true
