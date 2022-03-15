@@ -15,7 +15,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Royal Game of Ur"
-run/main_scene="res://nodes/Root.tscn"
+run/main_scene="res://nodes/App.tscn"
 config/icon="res://icon.png"
 
 [display]
