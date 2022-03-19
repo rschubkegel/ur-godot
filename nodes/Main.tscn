@@ -68,7 +68,6 @@ margin_right = 334.0
 margin_bottom = 420.0
 rect_min_size = Vector2( 96, 48 )
 theme = ExtResource( 2 )
-disabled = true
 text = "Play Local"
 __meta__ = {
 "_edit_use_anchors_": false

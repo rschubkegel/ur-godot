@@ -19,7 +19,7 @@ Playing --> GameOver: player wins
 GameOver --> Start: menu button
 ```
 
-## ER Diagram
+## Class Diagram
 
 - `App.gd`
   - Contains app API
@@ -35,7 +35,15 @@ GameOver --> Start: menu button
 <!-- https://mermaid-js.github.io/mermaid/#/classDiagram -->
 
 ```mermaid
-erDiagram
-APP |o--|| GAME : has
-GAME ||--|| BOARD : represents
+classDiagram
+
+class App
+App *-- Game
+
+class Game
+Game *-- Board
+
+Class Board
+Board *-- Tile
+Board *-- Token
 ```
